@@ -21,3 +21,9 @@ Soon to come:
 - Breakout board: currently all inputs to the UNO are taken. Perhaps use a mega board? Or use a 
                   shift register. 
 - Teach other team members. 
+
+
+Ideas to change:
+- Perhaps implement a switch case instead of if statements. Could do something like:
+- Could replace pinmode functions to a seperate library and make 
+the executable loop simpler. 
