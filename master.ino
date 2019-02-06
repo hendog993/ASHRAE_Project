@@ -24,28 +24,48 @@ void setup() {
 }
 
 void loop() {
-
+  
   // These values are calculated each time and refresh constantly. 
   int resistance = analogRead(A0);
 
   if (resistance < 180) {
+    // This branch turns on the first LED, and prints to the LCD the quote and temp reading.
+    // The temperature reading comes from pin A1, and gets converted from voltage to degrees C. 
+    
     print_led_1();
     lcd_print("Temp in C:", temp_reading(analogRead(A1)));
   } 
+  
   else if (resistance < 420) {
+    // This branch turns on the second LED, and prints to the LCD the fahrenheit temp. 
+    // Fahrenheit is obtained by grabbing the analog voltage from pin A1, and inputting 
+    // that value into the "temp_reading" in the Bread.ino header file. Then, this 
+    // Celsius value is converted to fahrenheit from another function in the Bread.ino.
+  
     print_led_2();
-    lcd_print("Temp in F:", celsius_to_fah(temp_reading(analogRead(A1))));        
+    lcd_print("Temp in F:", celsius_to_fah(temp_reading(analogRead(A1))));  
   } 
+  
   else if (resistance < 680) {
+    // This branch turns on the third LED and prints the DHT sensor's temperature value. 
+    // The chk value grabs the reading from pin 13 and gives the ability to use the 
+    // DHT library function "temperature". 
+
     int chk = DHT.read11(DHT11_PIN);
     print_led_3();
     lcd_print("DHT Temp in C:", DHT.temperature);  
   }   
+  
   else if (resistance < 900) {
+    // This branch turns on the fourth LED and prints the DHT sensor's humidity value. 
+    // The chk value grabs the reading from pin 13 and gives the ability to use the 
+    // DHT library function "humidity". 
+    
     int chk = DHT.read11(DHT11_PIN);
     print_led_4();
     lcd_print("Humidity:", DHT.humidity);  
   } 
+  
   else { 
     led_off();
     lcd.clear();
