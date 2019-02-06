@@ -44,7 +44,7 @@ void loop() {
   else if (resistance < 900) {
     int chk = DHT.read11(DHT11_PIN);
     print_led_4();
-    lcd_print("Humidity:", DHT.humidity);  
+    lcd_print("DHT Humidity:", DHT.humidity);  
   } 
   else { 
     led_off();
