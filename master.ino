@@ -3,7 +3,7 @@
 #include <dht.h>
 
 // Constant declarations 
-const int  DHT11_PIN = 13, ThermistorPin = A1, pin1 = 6, pin2 = 7, pin3 = 8, pin4 = 9;
+const int  DHT11_PIN = 13, ThermistorPin = A1, led1 = 6, led2 = 7, led3 = 8, led4 = 9;
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 const float c1 = 0.001129148, c2 = 0.000234125, c3 = 0.0000000876741; //steinhart-hart coeficients for thermistor
 const int R1 = 10000; // value of R1 on board
@@ -14,10 +14,10 @@ dht DHT;
 
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
-  pinMode(pin1, OUTPUT);
-  pinMode(pin2, OUTPUT);
-  pinMode(pin3, OUTPUT);
-  pinMode(pin4, OUTPUT);
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+  pinMode(led4, OUTPUT);
   Serial.begin(9600);
   lcd.begin(16, 2);
   lcd.clear();
