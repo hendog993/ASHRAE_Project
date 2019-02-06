@@ -1,4 +1,5 @@
 // Function to convert the analog voltage to celsius temperature: used for analog temp not dht.
+// These values are initialized in the master.ino file, and defined in the scope here as well. 
 float temp_reading(int num) {
   float logR2, R2, T;
   int Vo = analogRead(ThermistorPin);
@@ -16,38 +17,38 @@ float celsius_to_fah(float cel) {
 
 // Functions to write a set of 4 LEDs. 
 void print_led_1() {
-  digitalWrite(pin1, HIGH);
-  digitalWrite(pin2, LOW);
-  digitalWrite(pin3, LOW);
-  digitalWrite(pin4, LOW);
+  digitalWrite(led1, HIGH);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
 }
 
 void print_led_2() {
-  digitalWrite(pin1, LOW);
-  digitalWrite(pin2, HIGH);
-  digitalWrite(pin3, LOW);
-  digitalWrite(pin4, LOW);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, HIGH);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
 }
 
 void print_led_3() {
-  digitalWrite(pin1, LOW);
-  digitalWrite(pin2, LOW);
-  digitalWrite(pin3, HIGH);
-  digitalWrite(pin4, LOW);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, HIGH);
+  digitalWrite(led4, LOW);
 }
 
 void print_led_4() {
-  digitalWrite(pin1, LOW);
-  digitalWrite(pin2, LOW);
-  digitalWrite(pin3, LOW);
-  digitalWrite(pin4, HIGH);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, HIGH);
 }
 
 void led_off(){
-  digitalWrite(pin1, LOW);
-  digitalWrite(pin2, LOW);
-  digitalWrite(pin3, LOW);
-  digitalWrite(pin4, LOW);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
 }
 
 void lcd_print(const char* prompt, float value) {
