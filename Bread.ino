@@ -50,7 +50,9 @@ void led_off(){
   digitalWrite(pin4, LOW);
 }
 
-
-void lcd_print_2line(char statement) {
-  
+void lcd_print(const char* prompt, float value) {
+  lcd.clear();
+  lcd.print(prompt); // Not sure if println is needed for the first value. Test this. 
+  lcd.setCursor(0,1);
+  lcd.print(value);
 }
