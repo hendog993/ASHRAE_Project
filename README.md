@@ -12,7 +12,13 @@ Outputs:
 3. Digital Temperature in Celsius 
 4. Digital Humidity in percentage. 
 
+
+How to code is organized:
+master.ino : This holds the void setup() and void loop() functions.
+Bread.ino  : Holds the functions. 
+
 Ideas:
 - Make error messages
 - Better equipment
 - Change formatting with DHT with "Temp = 22 {}{}" , where {}{} are errors/blocks. 
+- Create custom void function to print to the LCD. 
