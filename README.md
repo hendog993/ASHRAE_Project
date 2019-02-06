@@ -19,6 +19,5 @@ Bread.ino  : Holds the functions.
 
 Ideas:
 - Make error messages
-- Better equipment
-- Change formatting with DHT with "Temp = 22 {}{}" , where {}{} are errors/blocks. 
+- Better equipment. 
 - Create custom void function to print to the LCD. 
