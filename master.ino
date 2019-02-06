@@ -27,38 +27,24 @@ void loop() {
 
   // These values are calculated each time and refresh constantly. 
   int resistance = analogRead(A0);
-  
+
   if (resistance < 180) {
-    float temp_in_C = temp_reading(analogRead(A1));
     print_led_1();
-    lcd.clear();
-    lcd.print("Temp in C:");
-    lcd.setCursor(0,1);
-    lcd.print(temp_in_C);
+    lcd_print("Temp in C:", temp_reading(analogRead(A1)));
   } 
   else if (resistance < 420) {
-    float fahrenheit = celsius_to_fah(temp_reading(analogRead(A1)));
     print_led_2();
-    lcd.clear();
-    lcd.print("Temp in F:");   
-    lcd.setCursor(0,1);
-    lcd.print(fahrenheit);          
+    lcd_print("Temp in F:", celsius_to_fah(temp_reading(analogRead(A1))));        
   } 
   else if (resistance < 680) {
     int chk = DHT.read11(DHT11_PIN);
     print_led_3();
-    lcd.clear();
-    lcd.print("Temperature = ");
-    lcd.setCursor(0,1);
-    lcd.println(DHT.temperature);
+    lcd_print("DHT Temp in C:", DHT.temperature);  
   }   
   else if (resistance < 900) {
     int chk = DHT.read11(DHT11_PIN);
     print_led_4();
-    lcd.clear();
-    lcd.print("Humidity = ");
-    lcd.setCursor(0,1);
-    lcd.println(DHT.humidity);
+    lcd_print("Humidity:", DHT.humidity);  
   } 
   else { 
     led_off();
