@@ -2,6 +2,12 @@
 Source codes for senior design ASHRAE trainer 
 These codes work with the Arduino Genuino Uno board. 
 
+How to navigate repository
+- master.ino : contains the void setup and void loop functions.
+- Bread.ino : function file that links to master 
+- ASHRAE.fzz : Arduino schematic and diagram for board. Possibly print a circuit board? 
+
+
 2/5/19
 Inputs:
 1. Potentiometer: This pot varies with resistance and acts as a switch between readings. 
