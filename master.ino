@@ -3,8 +3,18 @@
 #include <dht.h>
 
 // Constant declarations 
-const int  DHT11_PIN = 13, ThermistorPin = A1, led1 = 6, led2 = 7, led3 = 8, led4 = 9;
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+#define DHT11_PIN = 13;
+#define ThermistorPin = A1;
+#define led1 = 6;
+#define led2 = 7;
+#define led3 = 8;
+#define led4 = 9;
+#define rs = 12;
+#define en = 11;
+#define d4 = 5
+#define d5 = 6
+#define d7 = 2;
+
 const float c1 = 0.001129148, c2 = 0.000234125, c3 = 0.0000000876741; //steinhart-hart coeficients for thermistor
 const int R1 = 10000; // value of R1 on board
 
