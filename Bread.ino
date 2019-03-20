@@ -1,5 +1,6 @@
 // Function to convert the analog voltage to celsius temperature: used for analog temp not dht.
 // These values are initialized in the master.ino file, and defined in the scope here as well. 
+
 float temp_reading(int num) {
   float logR2, R2, T;
   int Vo = analogRead(ThermistorPin);
