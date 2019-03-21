@@ -3,6 +3,9 @@ Source codes for senior design ASHRAE trainer
 These codes work with the Arduino Genuino Uno board. 
 
 How to navigate repository
+- Senior_design.ino - final design implementation. In progress as of 3.20
+- aFunctions.ino - contains more void functions to improve readability 
+
 - master.ino : contains the void setup and void loop functions.
 - Bread.ino : function file that links to master 
 - ASHRAE.fzz : Arduino schematic and diagram for board. Possibly print a circuit board? 
