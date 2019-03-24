@@ -22,9 +22,28 @@ int switch_knob(int main_resistance) {
     else return 0;
 }
 
-
 int resistance_to_integer(int main_resistance) {
   // calculate slope values and relationship between expected P 
   int integer = 0;
   return integer;
+}
+
+void boolButton(int button1) {
+  if (button1 == true) {
+  } return 
+}
+
+void power_led(int input) {
+  // Change led write configuration based on integer input. 
+  // Possible create a void function to power off all leds. 
+  digitalWrite(led_row1, HIGH);
+}
+
+void reset_led() {
+  digitalWrite(led_row1, LOW);
+  digitalWrite(led_row2, LOW);
+  digitalWrite(led_row3, LOW);
+  digitalWrite(led_row4, LOW);
+}
+
 }
