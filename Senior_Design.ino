@@ -5,7 +5,6 @@
  * ==========================================================================
  */ 
 
-
 // Liquidcrystal.h  defines the LCD functions and classes.
 // max6675.h defines the K-type thermocouple c
 #include <LiquidCrystal.h>
@@ -48,9 +47,11 @@ const int evaporator_out = 7;
 // LED pins for performance
 const int mass_flow_led = 8;
 const int efficiency_led = 9; 
+const int power_led = 10;
 
 // Buttons for high pressure and low pressure entry. 
 short int high_pressure_button = 46, low_pressure_button = 47;
+unsigned char high_pressure_flag = 0, low_pressure_flag = 0;
 
 // Variables for the interface. 
 int main_resistance; 
@@ -60,6 +61,7 @@ int low_side_pressure;
 // Derived values for the cycle. 
 double mass_flow;
 double efficiency;
+double power;
  
 void setup() {
   // put your setup code here, to run once:
@@ -72,6 +74,9 @@ void setup() {
   pinMode(condenser_out, OUTPUT);
   pinMode(throttle_out, OUTPUT);
   pinMode(evaporator_out, OUTPUT);
+  pinMode(mass_flow_led, OUTPUT);
+  pinMode(efficiency_led, OUTPUT);
+  pinMode(power_led, OUTPUT);
   pinMode(high_pressure_button, INPUT);
   pinMode(low_pressure_button, INPUT);
 }
@@ -79,38 +84,66 @@ void setup() {
 void loop() {
   main_resistance = analogRead(A0);
   // ktc.readCelsius(); reads celsius temperature. will be ktcx for different thermocouples 
-
+  high_pressure_flag = digitalRead(high_pressure_button);
+  low_pressure_flag = digitalRead(low_pressure_button);
   
+  if (high_pressure_flag == 1) {
+    high_side_pressure = high_pressure_menu();
+  }
+  
+  if (low_pressure_flag == 1) {
+    low_side_pressure = low_pressure_menu();
+  }
   
   
   switch (switch_knob(main_resistance)) {
     case 1:
       // read compressor outlet, print compressor outlet thermocouple. 
-      break;
+        write_compressor_out_led();
+        break;
+      
     case 2:
       // Read high side from input: Possible interface? If not exists, prompt input. 
-      break;
+        write_high_pressure_led();
+        break;
+      
     case 3: 
           // Read condenser outlet, print condenser outlet thermocouple. 
-      break;
+        write_condenser_out_led() ;
+        break;
+      
     case 4:
           // Read throttle outlet, print throttle outlet thermocouple. 
-      break;
+        write_throttle_out_led();
+        break;
+      
     case 5: 
           // Read low side pressure outlet, flash LEDS, print to LCD. 
-      break;
+        write_low_pressure_led();
+        break;
+      
     case 6:
           // Read evaporator air outlet, print evaporator outlet thermocouple. 
-      break;
+        write_evaporator_out_led();
+        break;
+      
     case 7: 
-        // Display refrigeration efficiency to LCD. Flash central LED. 
-      break;
+        // Display refrigeration efficiency to LCD. flash central LED. 
+        write_efficiency_led();
+        break;
+
     case 8:
         // Display refrigeration mass flow rate to LCD, flash central LED. 
-      break;  
-    case 9;
-    break;
-    case 10:
+        write_mass_flow_led();
+        break;  
+      
+    case 9:
+        // Display refrigeration power to LCD, flash central LED> 
+        write_power_led();
+        break;
+    
+    default:
     break;
   } 
+  delay(1000);
 }
