@@ -1,7 +1,7 @@
 /* ==========================================================================
  * =====================ASHRAE Senior Design Project=========================
  * ======================Contributors: Henry Gilbert ========================
- * ==========================================================================
+ * =======================Yianni , Daniel Howard ============================
  * ==========================================================================
  */ 
 
@@ -20,6 +20,9 @@ const int ktc6SO = 35, ktc6CS = 37, ktc6CLK = 39;
 const int ktc7SO = 40, ktc7CS = 42, ktc7CLK = 44;
 const int ktc8SO = 41, ktc8CS = 43, ktc8CLK = 45;
 
+// Declarations for rotary encoder input pins. 
+const short int encoderA = 46, encoderB = 47;
+
 // LCD pinmode declaration. Bottom 3 set of pins on MEGA. 
 const int rs = 48, en = 49, d4 = 50, d5 = 51, d6 = 52, d7 = 53;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);   // Object declaration of LCD  
@@ -35,26 +38,25 @@ MAX6675 ktc7(ktc7CLK, ktc7CS, ktc7SO);
 MAX6675 ktc8(ktc8CLK, ktc8CS, ktc8SO); 
 
 // LED pins for pressure 
-const int high_pressure_led = 2;
-const int low_pressure_led = 3;
+const short int high_pressure_led = 2;
+const short int low_pressure_led = 3;
 
 // LED pins for refrigerant. 
-const int compressor_out = 4;
-const int condenser_out = 5;
-const int throttle_out = 6;
-const int evaporator_out = 7;
+const short int compressor_out = 4;
+const short int condenser_out = 5;
+const short int throttle_out = 6;
+const short int evaporator_out = 7;
 
 // LED pins for performance
-const int mass_flow_led = 8;
-const int efficiency_led = 9; 
-const int power_led = 10;
+const short int mass_flow_led = 8;
+const short int efficiency_led = 9; 
+const short int power_led = 10;
 
 // Buttons for high pressure and low pressure entry. 
 short int high_pressure_button = 46, low_pressure_button = 47;
 unsigned char high_pressure_flag = 0, low_pressure_flag = 0;
 
 // Variables for the interface. 
-int main_resistance; 
 int high_side_pressure;
 int low_side_pressure;
 
@@ -62,9 +64,12 @@ int low_side_pressure;
 double mass_flow;
 double efficiency;
 double power;
+
+// Encoder variables
+short int counter = 0;
+int aState, aLastState; 
  
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   lcd.begin(16,4);
   lcd.clear();
@@ -77,12 +82,15 @@ void setup() {
   pinMode(mass_flow_led, OUTPUT);
   pinMode(efficiency_led, OUTPUT);
   pinMode(power_led, OUTPUT);
+  
   pinMode(high_pressure_button, INPUT);
   pinMode(low_pressure_button, INPUT);
+  pinMode(encoderA, INPUT);
+  pinMode(encoderB, INPUT);
+  aLastState = digitalRead(encoderA); 
 }
 
 void loop() {
-  main_resistance = analogRead(A0);
   // ktc.readCelsius(); reads celsius temperature. will be ktcx for different thermocouples 
   high_pressure_flag = digitalRead(high_pressure_button);
   low_pressure_flag = digitalRead(low_pressure_button);
@@ -94,9 +102,10 @@ void loop() {
   if (low_pressure_flag == 1) {
     low_side_pressure = low_pressure_menu();
   }
+
+  // Get switch knob value for swapping between compressors. 
   
-  
-  switch (switch_knob(main_resistance)) {
+  switch (encoder()) {
     case 1:
       // read compressor outlet, print compressor outlet thermocouple. 
         write_compressor_out_led();
@@ -110,6 +119,7 @@ void loop() {
     case 3: 
           // Read condenser outlet, print condenser outlet thermocouple. 
         write_condenser_out_led() ;
+        lcd.print(ktc1.readCelsius());
         break;
       
     case 4:
@@ -141,9 +151,6 @@ void loop() {
         // Display refrigeration power to LCD, flash central LED> 
         write_power_led();
         break;
-    
-    default:
-    break;
-  } 
-  delay(1000);
+  }
+
 }

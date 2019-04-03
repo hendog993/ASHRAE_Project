@@ -1,35 +1,31 @@
 // Performance: gets all temperatures and pressures and calculates performance. 
-
-void print_lcd(const char* prompt, double value) {
-  
-}
-
-
-
 // Conditional if statements to allow for selecting measurements with potentiometer. 
 // Directly enters the switch statement in the mainloop function. 
-int switch_knob(int main_resistance) {
-    if (main_resistance < 100) return 1;
-    else if (main_resistance < 200) return 2;
-    else if (main_resistance < 300) return 3;
-    else if (main_resistance < 400) return 4;
-    else if (main_resistance < 500) return 5;
-    else if (main_resistance < 600) return 6;
-    else if (main_resistance < 700) return 7;
-    else if (main_resistance < 800) return 8;
-    else if (main_resistance < 900) return 9;
-    else return 0;
+
+int encoder() {
+    aState = digitalRead(encoderA); // Reads the "current" state of the outputA
+   // If the previous and the current state of the outputA are different, that means a Pulse has occured
+   if (aState != aLastState){     
+     // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
+     if (digitalRead(encoderB) != aState) counter ++;
+     else counter --;
+   }
+     
+     if (counter > 75) counter = 0;
+     if (counter < 0) counter = 75;
+   aLastState = aState; // Updates the previous state of the outputA with the current state
+  
+  if      (counter < 8)  return 1;
+  else if (counter < 16) return 2;
+  else if (counter < 24) return 3;
+  else if (counter < 32) return 4;
+  else if (counter < 40) return 5;
+  else if (counter < 48) return 6;
+  else if (counter < 56) return 7;
+  else if (counter < 64) return 8;
+  else if (counter < 72) return 9;
 }
 
-int resistance_to_integer(int main_resistance) {
-  // calculate slope values and relationship between expected P 
-  return 0;
-}
-
-int menu_resistance_to_int(int main_resistance) {
-  // calculate 
-  return 0;
-}
 
 int calculate_power() {
   return 0;
