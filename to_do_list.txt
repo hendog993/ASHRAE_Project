@@ -1,6 +1,0 @@
-- Order parts
-- Assemble the unit
-- Wire schematics for arduino 
-- Write documentation
-- Integrate with MATLAB
-- Write trainers manual 
