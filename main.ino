@@ -7,6 +7,7 @@
 
 // Liquidcrystal.h  defines the LCD functions and classes.
 // max6675.h defines the K-type thermocouple c
+
 #include <LiquidCrystal.h>
 #include <max6675.h>
 
@@ -21,7 +22,7 @@ const short int ktc6SO = 35, ktc6CS = 37, ktc6CLK = 39;
 const short int ktc7SO = 40, ktc7CS = 42, ktc7CLK = 44;
 const short int ktc8SO = 41, ktc8CS = 43, ktc8CLK = 45;
 
-// Declarations of thermocouples 1-8. 7-8 are optional.
+// Declarations of thermocouples 1-8. 
 MAX6675 ktc1(ktc1CLK, ktc1CS, ktc1SO);
 MAX6675 ktc2(ktc2CLK, ktc2CS, ktc2SO);
 MAX6675 ktc3(ktc3CLK, ktc3CS, ktc3SO);
@@ -30,6 +31,20 @@ MAX6675 ktc5(ktc5CLK, ktc5CS, ktc5SO);
 MAX6675 ktc6(ktc6CLK, ktc6CS, ktc6SO);
 MAX6675 ktc7(ktc7CLK, ktc7CS, ktc7SO);
 MAX6675 ktc8(ktc8CLK, ktc8CS, ktc8SO);
+
+// Pointers and references for thermocouples. Used to address switch mode feature of compressors. 
+MAX6675 *ptrktc1 = &ktc1;
+MAX6675 *ptrktc2 = &ktc2; 
+MAX6675 *ptrktc3 = &ktc3; 
+MAX6675 *ptrktc4 = &ktc4;
+MAX6675 *ptrktc5 = &ktc5;
+MAX6675 *ptrktc6 = &ktc6;
+MAX6675 *ptrktc7 = &ktc7;
+MAX6675 *ptrktc8 = &ktc8;
+
+// Address by 0/1 row (scroll vs compressor) at the 1-4 index. 
+MAX6675 ptrKtc[2][4] = {{*ptrktc1, *ptrktc2, *ptrktc3, *ptrktc4},
+                          {*ptrktc5, *ptrktc6, *ptrktc7, *ptrktc8}};
 
 // ========== LCD SECTION ============
 // Pin declarations and instance creation.
@@ -55,7 +70,6 @@ const short int power_led = 10;
 // ========== BUTTON INPUTS ==========
 // Buttons for high pressure and low pressure entry.
 const short int high_pressure_button = 11, low_pressure_button = 12;
-
 
 // ========== SWITCH input for recip vs scroll compressor
 short int comp_mode_switch = 13;
@@ -117,7 +131,7 @@ void loop() {
   // First potentiometer knob. Displays compressor mode and compressor outlet temperature.
   if (main_resistance < 5) {
     write_compressor_out_led();
-    write_lcd("Compressor Temp", ktc1.readCelsius());
+    write_lcd("Compressor Temp", ptrKtc[digitalRead(comp_mode_switch)][0].readCelsius());
     lcd.print("C");
   }
 
@@ -128,13 +142,13 @@ void loop() {
 
   else if (main_resistance < 160) {
     write_condenser_out_led();
-    write_lcd("Condenser Out", ktc2.readCelsius());
+    write_lcd("Condenser Out",  ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius());
     lcd.print("C");
   }
 
   else if (main_resistance < 270) {
     write_throttle_out_led();
-    write_lcd("Throttle Out", ktc3.readCelsius());
+    write_lcd("Throttle Out",  ptrKtc[digitalRead(comp_mode_switch)][2].readCelsius());
     lcd.print("C");
   }
 
@@ -146,12 +160,13 @@ void loop() {
 
   else if (main_resistance < 515) {
     write_evaporator_out_led();
-    write_lcd("Evaporator Out", ktc4.readCelsius());
+    write_lcd("Evaporator Out",  ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius());
   }
 
   else if (main_resistance < 635) {
     write_mass_flow_led();
-    write_lcd("Mass flow", mass_flow);
+    write_lcd("Mass flow", calculate_mass_flow(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
+                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius()));
     lcd.print("kg/s");
   }
 
@@ -162,13 +177,20 @@ void loop() {
 
   else if (main_resistance < 880) {
     write_power_led();
-    write_lcd("Power", power);
+    write_lcd("Power", calculate_power(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
+                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius()));
     lcd.print("KW");
   }
 
   else if (main_resistance < 1024) {
-    test_buttons();
+//   lcd.setCursor(0,1);
+//   lcd.print(digitalRead(11));
+//   lcd.setCursor(0,2);
+//   lcd.print(digitalRead(12));
+//   lcd.setCursor(0,3);
+//   lcd.print(digitalRead(13));
+     lcd.print(pow(3,3));
   }
 
-  delay(200);
+  delay(400);
 }

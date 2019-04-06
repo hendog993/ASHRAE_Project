@@ -2,19 +2,40 @@
 // Conditional if statements to allow for selecting measurements with potentiometer. 
 // Directly enters the switch statement in the mainloop function. 
 
-
 // ============= DERIVED VALUES FROM DANIEL ==================
-int calculate_power() {
-  return 0;
+
+
+int calculate_power(double tempEvap, double tempCond) {
+  double C[10] = {645.1275928, -2.295127832, -7.218567883, -0.005535838, 0.042861644,
+                    0.076252192, 0.000563255, -0.000610193, 0.000112464, -0.000130886};
+                    
+  return C[0] + C[1]*tempCond + C[2]*tempEvap + C[3]*pow(tempCond, 2) + C[4]*tempEvap*tempCond + 
+         C[5]*pow(tempEvap, 2) + C[6]*pow(tempCond, 3) + C[7]*tempEvap*pow(tempCond, 2) + C[8]*tempCond * pow(tempEvap, 2) +
+         C[8]*tempCond*pow(tempEvap, 2) + C[9]*pow(tempEvap, 3);
 }
 
 int calculate_efficiency() {
   return 0;
 }
 
-int calculate_mass_flow() {
-  return 0;
+int calculate_mass_flow(double tempEvap, double tempCond) {
+  double C[10] = {40.15698882, 1.096371113, 0.14024549, 0.015865756, 0.002097207,
+                     -0.001690066, 9.03205E-05, -2.70756E-05, -1.35767E-05, 5.15408E-06};
+                     
+  return C[0] + C[1]*tempCond + C[2]*tempEvap + C[3]*pow(tempCond, 2) + C[4]*tempEvap*tempCond + 
+         C[5]*pow(tempEvap, 2) + C[6]*pow(tempCond, 3) + C[7]*tempEvap*pow(tempCond, 2) + C[8]*tempCond * pow(tempEvap, 2) +
+         C[8]*tempCond*pow(tempEvap, 2) + C[9]*pow(tempEvap, 3);
 }
+
+int calculate_capacity(double tempEvap, double tempCond) {
+  double C[10] = {4433.99929, 107.9502108, -6.654767819, 2.002620595, -0.2210224213,
+               -0.1026412673, 0.002942954154, -0.00968481191, -0.0006961641807, 0.0002807495071};
+
+  return C[0] + C[1]*tempCond + C[2]*tempEvap + C[3]*pow(tempCond, 2) + C[4]*tempEvap*tempCond + 
+         C[5]*pow(tempEvap, 2) + C[6]*pow(tempCond, 3) + C[7]*tempEvap*pow(tempCond, 2) + C[8]*tempCond * pow(tempEvap, 2) +
+         C[8]*tempCond*pow(tempEvap, 2) + C[9]*pow(tempEvap, 3);
+}
+
 
 // ================ MENUS ==============
 int high_pressure_menu() {
@@ -153,7 +174,6 @@ void write_power_led() {
 
 // ========== TEST CASE FOR BUTTONS AND SWITCH ==============
 void test_buttons() {
-   lcd.clear();
    lcd.setCursor(0,1);
    lcd.print("HIGH P");
    lcd.print(digitalRead(11));
@@ -163,4 +183,4 @@ void test_buttons() {
    lcd.setCursor(0,3);
    lcd.print("COMP SWITCH");
    lcd.print(digitalRead(13));
-}
+} 
