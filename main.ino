@@ -81,8 +81,9 @@ int low_side_pressure = 0;
 
 // Derived values for the cycle.
 double mass_flow = 0;
-double efficiency = 0;
+double capacity = 0;
 double power = 0;
+int efficiency = 0;
 
 // ============= COMPRESSOR MODE ===============
 // 2D array for refrigeration modes
@@ -113,17 +114,17 @@ void setup() {
 void loop() {
   // Check the potentiometer for rotary input.
   int main_resistance = analogRead(A0);
-
+  Serial.println(main_resistance);
 
   // ============== MENU LOOP ==================
   // Check the status of the high pressure killswitch. If low, open the menu.
-  if (digitalRead(high_pressure_button) == LOW) {
-    high_side_pressure = high_pressure_menu();
+  if (digitalRead(high_pressure_button) == HIGH) {
+    high_pressure_menu();
   }
 
   // Check the status of the low pressure killswitch. If low, open the menu.
-  if (digitalRead(low_pressure_button) == LOW) {
-    low_side_pressure = low_pressure_menu();
+  if (digitalRead(low_pressure_button) == HIGH) {
+    low_pressure_menu();
   }
 
 
@@ -165,32 +166,37 @@ void loop() {
 
   else if (main_resistance < 635) {
     write_mass_flow_led();
-    write_lcd("Mass flow", calculate_mass_flow(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
-                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius()));
+    mass_flow = calculate_mass_flow(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
+                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius());
+    write_lcd("Mass flow", mass_flow);
     lcd.print("kg/s");
   }
 
   else if (main_resistance < 760) {
     write_efficiency_led();
-    write_lcd("Efficiency:", efficiency);
+    capacity = calculate_capacity(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
+                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius());
+    // Named efficiency right now: Will change to capacitance, or whatever else down the road. 
+    write_lcd("Capacitance:", capacity );
   }
 
   else if (main_resistance < 880) {
     write_power_led();
-    write_lcd("Power", calculate_power(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
-                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius()));
+    power = calculate_power(ptrKtc[digitalRead(comp_mode_switch)][3].readCelsius(),
+                                       ptrKtc[digitalRead(comp_mode_switch)][1].readCelsius());
+    write_lcd("Power", power);
     lcd.print("KW");
   }
 
-  else if (main_resistance < 1024) {
-//   lcd.setCursor(0,1);
-//   lcd.print(digitalRead(11));
-//   lcd.setCursor(0,2);
-//   lcd.print(digitalRead(12));
-//   lcd.setCursor(0,3);
-//   lcd.print(digitalRead(13));
-     lcd.print(pow(3,3));
+  else if (main_resistance < 990) {
+   efficiency = 234;
+   write_lcd("Efficiency", efficiency);
   }
 
-  delay(400);
+  else if (main_resistance < 1024) {
+   while (analogRead(A0) > 1010) {
+    test_buttons();
+   }
+  }
+  delay(450);
 }
