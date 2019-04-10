@@ -41,7 +41,7 @@ int calculate_efficiency(double power, double qin) {
 
 // ================ MENUS ==============
 void high_pressure_menu() {
-  while (digitalRead(high_pressure_button) == HIGH) {
+  while (digitalRead(high_pressure_switch) == HIGH) {
     lcd.clear();
     lcd.print("Enter HIGH P");
     lcd.setCursor(0,2);
@@ -52,7 +52,7 @@ void high_pressure_menu() {
 }
 
 void low_pressure_menu() {
-  while (digitalRead(low_pressure_button) == HIGH) {
+  while (digitalRead(low_pressure_switch) == HIGH) {
     lcd.clear();
     lcd.print("Enter LOW P");
     lcd.setCursor(0,2);
@@ -187,51 +187,75 @@ void write_power_led() {
   digitalWrite(power_led, HIGH);
 }
 
+void blink_greens() {
+  digitalWrite(high_pressure_led, LOW);
+  digitalWrite(low_pressure_led, LOW);
+  digitalWrite(compressor_out, LOW);
+  digitalWrite(condenser_out, LOW);
+  digitalWrite(throttle_out, LOW);
+  digitalWrite(evaporator_out, LOW);
+  digitalWrite(mass_flow_led, LOW);
+  digitalWrite(efficiency_led, LOW);
+  digitalWrite(power_led, LOW);
+  digitalWrite(mass_flow_led, LOW);
+  delay(50);
+  digitalWrite(mass_flow_led, HIGH);
+  delay(50);
+  digitalWrite(efficiency_led, HIGH);
+  delay(50);
+  digitalWrite(power_led, HIGH);
+  delay(50);
+  digitalWrite(mass_flow_led, LOW);
+  digitalWrite(efficiency_led, LOW);
+  digitalWrite(power_led, LOW);
+}
+
 // ========== TEST CASE FOR BUTTONS AND SWITCH ==============
 void test_buttons() {
+   int t = 50;
    lcd.clear();
    lcd.setCursor(0,0);
    lcd.print("SYSTEM TEST");
    lcd.setCursor(0,1);
    lcd.print("HIGH P    ");
-   lcd.print(digitalRead(11));
+   lcd.print(digitalRead(high_pressure_switch));
    lcd.setCursor(0,2);
    lcd.print("LOW P    ");
-   lcd.print(digitalRead(12));
+   lcd.print(digitalRead(low_pressure_switch));
    lcd.setCursor(0,3);
    lcd.print("COMP SWITCH    ");
    lcd.print(digitalRead(13));
    write_compressor_out_led();
-   delay(100);
+   delay(t);
    write_high_pressure_led();
-   delay(100);
+   delay(t);
    write_condenser_out_led();
-   delay(100);
+   delay(t);
    write_throttle_out_led();
-   delay(100);
+   delay(t);
    write_low_pressure_led();
-   delay(100);
+   delay(t);
    write_evaporator_out_led();
-   delay(100);
+   delay(t);
    write_mass_flow_led();
-   delay(100);
+   delay(t);
    write_power_led();
-   delay(100);
+   delay(t);
    write_efficiency_led();
-   delay(100);
+   delay(t);
    write_power_led();
-   delay(100);
+   delay(t);
    write_mass_flow_led();
-   delay(100);
+   delay(t);
    write_evaporator_out_led();
-   delay(100);
+   delay(t);
    write_low_pressure_led();
-   delay(100);
+   delay(t);
    write_throttle_out_led();
-   delay(100);
+   delay(t);
    write_condenser_out_led();
-   delay(100);
+   delay(t);
    write_high_pressure_led();
-   delay(100);
+   delay(t);
    write_compressor_out_led();
 } 

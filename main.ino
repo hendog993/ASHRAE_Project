@@ -69,7 +69,7 @@ const short int power_led = 10;
 
 // ========== BUTTON INPUTS ==========
 // Buttons for high pressure and low pressure entry.
-const short int high_pressure_button = 11, low_pressure_button = 12;
+const short int high_pressure_switch = 12, low_pressure_switch = 11;
 
 // ========== SWITCH input for recip vs scroll compressor
 short int comp_mode_switch = 13;
@@ -106,8 +106,8 @@ void setup() {
   pinMode(power_led, OUTPUT);
 
   // ======= BUTTON & SWITCH INPUTS ==========
-  pinMode(high_pressure_button, INPUT);
-  pinMode(low_pressure_button, INPUT);
+  pinMode(high_pressure_switch, INPUT);
+  pinMode(low_pressure_switch, INPUT);
   pinMode(comp_mode_switch, INPUT);
 }
 
@@ -118,12 +118,12 @@ void loop() {
 
   // ============== MENU LOOP ==================
   // Check the status of the high pressure killswitch. If low, open the menu.
-  if (digitalRead(high_pressure_button) == HIGH) {
+  if (digitalRead(high_pressure_switch) == HIGH) {
     high_pressure_menu();
   }
 
   // Check the status of the low pressure killswitch. If low, open the menu.
-  if (digitalRead(low_pressure_button) == HIGH) {
+  if (digitalRead(low_pressure_switch) == HIGH) {
     low_pressure_menu();
   }
 
@@ -190,6 +190,7 @@ void loop() {
 
   else if (main_resistance < 990) {
    efficiency = 234;
+   blink_greens();
    write_lcd("Efficiency", efficiency);
   }
 
