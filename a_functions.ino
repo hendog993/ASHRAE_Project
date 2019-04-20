@@ -19,6 +19,10 @@ void high_pressure_menu() {
       lcd.print("Enter HIGH P");
       lcd.setCursor(0, 2);
       lcd.print(resistance_to_integer(analogRead(A0)));
+      lcd.print(" psig");
+      lcd.setCursor(0,3);
+      lcd.print(resistance_to_integer(analogRead(A0)) + 14.7);
+      lcd.print(" psia");
       delay(400);
     }
     high_side_pressure = resistance_to_integer(analogRead(A0));
@@ -30,6 +34,10 @@ void low_pressure_menu() {
       lcd.print("Enter LOW P");
       lcd.setCursor(0, 2);
       lcd.print(resistance_to_integer(analogRead(A0)));
+      lcd.print(" psig");
+      lcd.setCursor(0,3);
+      lcd.print(resistance_to_integer(analogRead(A0)) + 14.7);
+      lcd.print(" psia");
       delay(400);
     }
     low_side_pressure = resistance_to_integer(analogRead(A0));
@@ -51,6 +59,31 @@ void low_pressure_menu() {
     lcd.setCursor(0, 3);
     lcd.print(measurement);
   }
+
+void all_off() {
+    digitalWrite(high_pressure_led, LOW);
+    digitalWrite(low_pressure_led, LOW);
+    digitalWrite(compressor_out, LOW);
+    digitalWrite(condenser_out, LOW);
+    digitalWrite(throttle_out, LOW);
+    digitalWrite(evaporator_out, LOW);
+    digitalWrite(mass_flow_led, LOW);
+    digitalWrite(capacitance_led, LOW);
+    digitalWrite(power_led, LOW);
+}
+
+void all_on(){
+  digitalWrite(high_pressure_led, HIGH);
+    digitalWrite(low_pressure_led, HIGH);
+    digitalWrite(compressor_out, HIGH);
+    digitalWrite(condenser_out, HIGH);
+    digitalWrite(throttle_out, HIGH);
+    digitalWrite(evaporator_out, HIGH);
+    digitalWrite(mass_flow_led, HIGH);
+    digitalWrite(capacitance_led, HIGH);
+    digitalWrite(power_led, HIGH);
+}
+
 
   // ================= LCD WRITING AND CANCELLING ===============
   void write_high_pressure_led() {
@@ -186,7 +219,7 @@ void low_pressure_menu() {
 
   // ========== TEST CASE FOR BUTTONS AND SWITCH ==============
   void test_buttons() {
-    int t = 50; // miliseconds
+    int t = 400; // miliseconds
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("SYSTEM TEST");
@@ -199,37 +232,9 @@ void low_pressure_menu() {
     lcd.setCursor(0, 3);
     lcd.print("COMP SWITCH    ");
     lcd.print(digitalRead(13));
-    write_compressor_out_led();
+    all_on();
     delay(t);
-    write_high_pressure_led();
+    all_off();
     delay(t);
-    write_condenser_out_led();
-    delay(t);
-    write_throttle_out_led();
-    delay(t);
-    write_low_pressure_led();
-    delay(t);
-    write_evaporator_out_led();
-    delay(t);
-    write_mass_flow_led();
-    delay(t);
-    write_power_led();
-    delay(t);
-    write_capacitance_led();
-    delay(t);
-    write_power_led();
-    delay(t);
-    write_mass_flow_led();
-    delay(t);
-    write_evaporator_out_led();
-    delay(t);
-    write_low_pressure_led();
-    delay(t);
-    write_throttle_out_led();
-    delay(t);
-    write_condenser_out_led();
-    delay(t);
-    write_high_pressure_led();
-    delay(t);
-    write_compressor_out_led();
+    
   }

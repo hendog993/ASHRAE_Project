@@ -105,20 +105,19 @@ void setup() {
 
 void loop() {
 /*
- * 
- * 
  * How the loop works: all dependencies and methods. 
  */
 
   // Check the potentiometer for resistance input (0-1024)
   int main_resistance = analogRead(A0);
+  Serial.println(main_resistance);
  
   // ============== MENU LOOP ==================
   // Check status of high pressure toggle switch. If high, open the menu.
   if (digitalRead(high_pressure_switch) == HIGH) {
     high_pressure_menu();
   }
-
+  
   // Check status of low pressure toggle switch. If high, open the menu.
   if (digitalRead(low_pressure_switch) == HIGH) {
     low_pressure_menu();
@@ -126,48 +125,49 @@ void loop() {
 
   // ============ MAIN LED LOOP ================
   // First potentiometer knob. Displays compressor mode and compressor outlet temperature.
-  if (main_resistance < 10) {
+  if (main_resistance < 100) {
     write_compressor_out_led();
     write_lcd("Compressor Temp", ptrKtc[digitalRead(comp_mode_switch)][0].readFahrenheit());
     lcd.print(" F");
   }
 
   // Displays high side pressure value, 0 if not input, and blue leds.
-  else if (main_resistance < 45) {
+  else if (main_resistance < 213) {
     write_high_pressure_led();
     write_lcd("High Side P", high_side_pressure);
+    lcd.print(" psi");
   }
 
   // Displays condenser outlet temerature and lights condenser out LED.
-  else if (main_resistance < 160) {
+  else if (main_resistance < 327) {
     write_condenser_out_led();
     write_lcd("Condenser Out",  ptrKtc[digitalRead(comp_mode_switch)][1].readFahrenheit());
     lcd.print(" F");
   }
 
   // Displays metering device out temp and led
-  else if (main_resistance < 270) {
+  else if (main_resistance < 446) {
     write_throttle_out_led();
     write_lcd("Throttle Out",  ptrKtc[digitalRead(comp_mode_switch)][2].readFahrenheit());
     lcd.print(" F");
   }
 
   // Lights low side pressure leds and displays, 0 if not entered, low side pressure.
-  else if (main_resistance < 400) {
+  else if (main_resistance < 565) {
     write_low_pressure_led();
     write_lcd("Low Side P", low_side_pressure);
-    lcd.print(" kPa");
+    lcd.print(" psi");
   }
 
   // Lights evaporator out LED, displays thermocouple temperature.
-  else if (main_resistance < 515) {
+  else if (main_resistance < 684) {
     write_evaporator_out_led();
     write_lcd("Evaporator Out",  ptrKtc[digitalRead(comp_mode_switch)][3].readFahrenheit());
     lcd.print(" F");
   }
 
   // Writes MASS FLOW out and turns on first green light.
-  else if (main_resistance < 635) {
+  else if (main_resistance < 803) {
     float MF_R[10] = {59.33840856, 1.006688227, 0.2030794489, 0.01488044391, 0.01294057197,
                   -0.00353467516, 4.25E-05, 3.13E-05, -6.69E-05, 8.47E-06 };
     float MF_SC[10] = {40.15698882, 1.096371113, 0.14024549, 0.015865756, 0.002097207,
@@ -177,12 +177,12 @@ void loop() {
       calculate(MF_SC, ptrKtc[digitalRead(comp_mode_switch)][1].readFahrenheit(),ptrKtc[digitalRead(comp_mode_switch)][3].readFahrenheit()) 
       };
     write_mass_flow_led();
-    write_lcd("Mass Flow:", mass_flow_values[ digitalRead(comp_mode_switch)] );
+    write_lcd("Mass Flow:", mass_flow_values[digitalRead(comp_mode_switch)]);
     lcd.print(" lbs/hr");
   }
 
   // Writes refrigerant CAPACITANCE out and lights second green led.
-  else if (main_resistance < 760) {
+  else if (main_resistance < 919) {
     const float CAP_R[10] = {5897.679, 112.7528, 9.887627, 1.777997, 0.5887399, -0.4782697,
                    7.58E-04, -0.005700553, -0.00568108, 0.001614988 };
     const float CAP_SC[10] = {4433.99929, 107.9502108, -6.654767819, 2.002620595, -0.2210224213,
@@ -193,12 +193,12 @@ void loop() {
       calculate(CAP_SC, ptrKtc[digitalRead(comp_mode_switch)][1].readFahrenheit(),ptrKtc[digitalRead(comp_mode_switch)][3].readFahrenheit()) 
       };
     // Named efficiency right now: Will change to capacitance, or whatever else down the road.
-    write_lcd("Capacitance:", capacitance_values[digitalRead(comp_mode_switch)]);
+    write_lcd("Capacity:", capacitance_values[digitalRead(comp_mode_switch)]);
     lcd.print(" BTU/hr");
   }
 
   // Writes POWER output to LCD and lights third green LED.
-  else if (main_resistance < 880) {
+  else if (main_resistance < 1000) {
     write_power_led();
     const float W_R[10] = {126.9581, -5.372865, 8.524027, -0.09801806, 0.1522044, -0.05396478,
                  -9.06E-04, 9.33E-04, -2.39E-04, 1.16E-04
@@ -214,19 +214,10 @@ void loop() {
     lcd.print(" Watts");
   }
 
-  // Writes current draw out and flashes green leds. (Possibly efficiency);
-  else if (main_resistance < 990) {
-    blink_greens();
-    const float A_R[10] = {3.652199, -0.0372356, 0.04894778, -8.07E-04, 9.86E-04, -2.83E-04,
-                 -1.06E-05, 1.10E-05, -1.32E-06, 5.34E-07 };
-    const float A_SC[10] = {2.558134799, 0.001949875929, -0.000379452699, -0.00009545899939, -0.00003352478468,
-                  0.00007065422042, 0.000004294488347, -0.000003643615934, 0.000001638983358, -0.00000004068571839 };
-    float current_values[2] = {calculate(A_R, 100,100), calculate(A_SC, 100,100)};
-    write_lcd("Current ", current_values[digitalRead(comp_mode_switch)]);
-  }
+  // Writes efficiency: 
 
   else if (main_resistance < 1024) {
-    while (analogRead(A0) > 1010) {
+        while (analogRead(A0) > 1005) {
       test_buttons();
     }
   }
